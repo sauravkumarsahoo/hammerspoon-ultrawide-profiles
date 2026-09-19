@@ -150,3 +150,9 @@ hs -c "WindowEngine:setAnimationDuration(0.25)"
 2. [Hammerspoon](https://www.hammerspoon.org/) installed.
 3. Ensure Hammerspoon has **Accessibility** permissions enabled under:
    `System Settings > Privacy & Security > Accessibility`.
+
+---
+
+## 📄 License
+
+This project is licensed under the [MIT License](LICENSE).
