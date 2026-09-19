@@ -173,28 +173,46 @@ function mouseModule.createEventTap(engine)
       end
 
     elseif eventType == hs.eventtap.event.types.leftMouseUp then
-      cancelDwell()
+      local wasArmed = state.snapArmed
+      local zone = state.activeZone
+      local win = state.targetWindow or hs.window.focusedWindow()
+
+      if state.dwellTimer then
+        state.dwellTimer:stop()
+        state.dwellTimer = nil
+      end
+      state.snapArmed = false
+
       if engine.preview then engine.preview:hide(0.10) end
 
-      if state.snapArmed and state.activeZone and state.targetWindow then
-        local win = state.targetWindow
-        local screen = win:screen() or hs.screen.mainScreen()
-        local uFrame = screen:frame()
-        local profile = engine:getCurrentProfile()
-        local target = engine.geometry.calculateFrame(
-          profile,
-          engine.split_horizontal,
-          state.activeZone.col,
-          state.activeZone.row,
-          uFrame,
-          win
-        )
-        engine.animation.animate(win, target, engine.config.animation_duration)
+      if wasArmed and zone and win then
+        local targetWin = win
+        local targetZone = zone
+        -- Small 10ms delay allows macOS WindowServer to finish the native drag release
+        -- before our animation engine takes full control of the window coordinates
+        hs.timer.doAfter(0.01, function()
+          if not targetWin or not targetWin:isVisible() then
+            targetWin = hs.window.focusedWindow()
+          end
+          if targetWin and targetWin:isStandard() then
+            local screen = targetWin:screen() or hs.screen.mainScreen()
+            local uFrame = screen:frame()
+            local profile = engine:getCurrentProfile()
+            local target = engine.geometry.calculateFrame(
+              profile,
+              engine.split_horizontal,
+              targetZone.col,
+              targetZone.row,
+              uFrame,
+              targetWin
+            )
+            engine.animation.animate(targetWin, target, engine.config.animation_duration)
+          end
+        end)
       end
 
       state.activeZone = nil
       state.targetWindow = nil
-      state.snapArmed = false
     end
 
     return false
