@@ -1,13 +1,15 @@
 -- =============================================================================
 -- engine/animation.lua
--- 100 FPS animation engine with a quick yet graceful easing curve
+-- Synchronized 60 FPS master-loop animation engine with smooth cubic ease-out
 -- =============================================================================
 
 local animation = {
-  activeAnimations = {}
+  activeAnimations = {},
+  masterTimer = nil,
+  frameInterval = 0.016 -- 60 FPS (16ms) provides rock-solid redraw cadence for macOS & WebKit/Chromium
 }
 
--- Detect current screen refresh rate dynamically (e.g. 60Hz, 100Hz, 120Hz ProMotion, 144Hz)
+-- Detect current screen refresh rate dynamically (backward compatibility proxy)
 function animation.getScreenRefreshRate(screen)
   screen = screen or hs.screen.mainScreen()
   if screen then
@@ -16,35 +18,58 @@ function animation.getScreenRefreshRate(screen)
       return mode.freq
     end
   end
-  return 60 -- Fallback to 60Hz if not reported
+  return 60
 end
 
--- Easing curve: Quick initial burst followed by a feathered, graceful deceleration
--- Reaches ~72% distance in first 30% of time, with zero velocity and acceleration at rest
-local function easeQuickGraceful(t)
+-- Easing curve: Smooth quadratic ease-out (t * (2 - t))
+-- Matches macOS native window physics: steady, natural deceleration with zero initial jerk
+local function easeOutQuad(t)
   if t <= 0 then return 0 end
   if t >= 1 then return 1 end
-  local f = 1 - t
-  return 1 - (f * f * f * (0.6 * f + 0.4))
+  return t * (2 - t)
+end
+
+-- Central synchronized tick for all active window animations
+local function masterTick()
+  local now = hs.timer.secondsSinceEpoch()
+  local hasActive = false
+
+  for id, anim in pairs(animation.activeAnimations) do
+    local progress = (now - anim.startTime) / anim.duration
+
+    if progress >= 1 then
+      animation.activeAnimations[id] = nil
+      pcall(function() anim.win:_setFrame(anim.target) end)
+    else
+      hasActive = true
+      local r = easeOutQuad(progress)
+      local currentFrame = {
+        x = math.floor(anim.start.x + (anim.target.x - anim.start.x) * r + 0.5),
+        y = math.floor(anim.start.y + (anim.target.y - anim.start.y) * r + 0.5),
+        w = math.floor(anim.start.w + (anim.target.w - anim.start.w) * r + 0.5),
+        h = math.floor(anim.start.h + (anim.target.h - anim.start.h) * r + 0.5)
+      }
+      pcall(function() anim.win:_setFrame(currentFrame) end)
+    end
+  end
+
+  if not hasActive and animation.masterTimer then
+    animation.masterTimer:stop()
+    animation.masterTimer = nil
+  end
 end
 
 function animation.animate(win, target, duration)
   if not win then return end
   local id = win:id()
   if not id then
-    win:setFrame(target, 0)
+    pcall(function() win:_setFrame(target) end)
     return
   end
 
-  -- Stop and replace any active animation on this window
-  if animation.activeAnimations[id] then
-    animation.activeAnimations[id].timer:stop()
-    animation.activeAnimations[id] = nil
-  end
-
-  duration = duration or 0.30
+  duration = duration or 0.25
   if duration <= 0 then
-    win:setFrame(target, 0)
+    pcall(function() win:_setFrame(target) end)
     return
   end
 
@@ -57,48 +82,24 @@ function animation.animate(win, target, duration)
     return
   end
 
-  local screen = win:screen() or hs.screen.mainScreen()
-  local refreshRate = animation.getScreenRefreshRate(screen)
-  local frameInterval = 1.0 / refreshRate
+  animation.activeAnimations[id] = {
+    win = win,
+    start = start,
+    target = target,
+    startTime = hs.timer.secondsSinceEpoch(),
+    duration = duration
+  }
 
-  local startTime = hs.timer.secondsSinceEpoch()
-  local animEntry = {}
-
-  -- Timer dynamically synchronizes to the screen's native refresh rate
-  animEntry.timer = hs.timer.new(frameInterval, function()
-    local now = hs.timer.secondsSinceEpoch()
-    local progress = (now - startTime) / duration
-
-    if progress >= 1 then
-      animEntry.timer:stop()
-      animation.activeAnimations[id] = nil
-      win:setFrame(target, 0)
-    else
-      local r = easeQuickGraceful(progress)
-      local currentFrame = {
-        x = math.floor(start.x + (target.x - start.x) * r + 0.5),
-        y = math.floor(start.y + (target.y - start.y) * r + 0.5),
-        w = math.floor(start.w + (target.w - start.w) * r + 0.5),
-        h = math.floor(start.h + (target.h - start.h) * r + 0.5)
-      }
-      local ok = pcall(function() win:_setFrame(currentFrame) end)
-      if not ok then
-        animEntry.timer:stop()
-        animation.activeAnimations[id] = nil
-        win:setFrame(target, 0)
-      end
-    end
-  end)
-
-  animation.activeAnimations[id] = animEntry
-  animEntry.timer:start()
+  if not animation.masterTimer then
+    animation.masterTimer = hs.timer.new(animation.frameInterval, masterTick)
+    animation.masterTimer:start()
+  end
 end
 
 function animation.stopAll()
-  for id, anim in pairs(animation.activeAnimations) do
-    if anim.timer then
-      anim.timer:stop()
-    end
+  if animation.masterTimer then
+    animation.masterTimer:stop()
+    animation.masterTimer = nil
   end
   animation.activeAnimations = {}
 end

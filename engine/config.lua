@@ -14,12 +14,21 @@ local config = {
   default_profile = 3, -- Default to fourths [  1/4  ][      1/2       ][  1/4  ]
 
   -- Timing
-  hold_delay = 0.10,            -- Hold at edge for ~100ms before arming snap & showing preview
-  animation_duration = 0.30,    -- Quick yet graceful 300ms window snap animation
+  hold_delay = 0.05,            -- Hold at edge for ~50ms before arming snap & showing preview
+  animation_duration = 0.25,    -- Buttery smooth 250ms cubic ease-out animation
 
-  -- Spatial Thresholds (pixels)
+  -- Spatial Thresholds (pixels & ratios)
   edge_threshold = 35,          -- Distance from edge / Dock boundary to trigger snap zone
   corner_threshold = 180,       -- Corner quadrant threshold
+  edge_hysteresis = 25,         -- Buffer to keep zone active during mouse jitter
+  corner_hysteresis = 20,       -- Buffer to keep corner zone active
+  center_drop_height_ratio = 2/3, -- Vertical span for center drop zone (from dock to 2/3 up the screen)
+  center_drop_margin = 50,      -- Horizontal buffer around center column bounds (pixels)
+
+  -- Behavior
+  refit_on_profile_change = true, -- Automatically refit snapped windows when changing profile
+  show_halves_picker = true,      -- Show interactive GUI picker for center windows when switching to Halves (1/2 1/2)
+  shift_control_enabled = true,   -- Enable Shift-hold control mode for single-key positioning & window cycling
 
   -- UI Styles
   alert_style = {

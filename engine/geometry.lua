@@ -76,4 +76,58 @@ function geometry.calculateFrame(profile, col, row, screen, win)
   return {x = x, y = y, w = w, h = h}
 end
 
+-- Detect if a window matches any valid snap slot under a given profile
+function geometry.detectWindowSlot(win, profile, screenFrame, tolerance)
+  if not win then return nil end
+  tolerance = tolerance or 5
+  screenFrame = screenFrame or (type(win.screen) == "function" and win:screen() and win:screen():frame()) or hs.screen.mainScreen():frame()
+
+  local f = (type(win.frame) == "function" and win:frame()) or win
+  local slots = {
+    {col = "left", row = "full"},
+    {col = "right", row = "full"},
+    {col = "left", row = "top"},
+    {col = "left", row = "bottom"},
+    {col = "right", row = "top"},
+    {col = "right", row = "bottom"},
+  }
+  if profile.id ~= "halves" then
+    table.insert(slots, {col = "center", row = "full"})
+  end
+
+  for _, slot in ipairs(slots) do
+    local target = geometry.calculateFrame(profile, slot.col, slot.row, screenFrame, win)
+    if math.abs(f.x - target.x) <= tolerance and
+       math.abs(f.y - target.y) <= tolerance and
+       math.abs(f.w - target.w) <= tolerance and
+       math.abs(f.h - target.h) <= tolerance then
+      return slot
+    end
+  end
+  return nil
+end
+
+-- Find matching slot for window, checking preferredProfile first, then fallback across allProfiles
+function geometry.findMatchingSlot(win, preferredProfile, allProfiles, screenFrame, tolerance)
+  if not win then return nil end
+  tolerance = tolerance or 5
+  screenFrame = screenFrame or (type(win.screen) == "function" and win:screen() and win:screen():frame()) or hs.screen.mainScreen():frame()
+
+  if preferredProfile then
+    local slot = geometry.detectWindowSlot(win, preferredProfile, screenFrame, tolerance)
+    if slot then return slot, preferredProfile end
+  end
+
+  if allProfiles then
+    for _, prof in ipairs(allProfiles) do
+      if not preferredProfile or prof.id ~= preferredProfile.id then
+        local slot = geometry.detectWindowSlot(win, prof, screenFrame, tolerance)
+        if slot then return slot, prof end
+      end
+    end
+  end
+
+  return nil, nil
+end
+
 return geometry
