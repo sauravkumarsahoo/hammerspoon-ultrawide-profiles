@@ -53,7 +53,7 @@ All hotkeys utilize the left-hand modifier cluster: `Ctrl + Alt`.
 ### Profile & Split Control
 | Shortcut | Action |
 |---|---|
-| `Ctrl + Alt + \`` | **Cycle** to next layout profile (2 → 3 → 4 → 5 → 6 → 2) |
+| ``Ctrl + Alt + ` `` | **Cycle** to next layout profile (2 → 3 → 4 → 5 → 6 → 2) |
 | `Ctrl + Alt + 1` | **Toggle horizontal split** for corner columns |
 | `Ctrl + Alt + 2` | Switch directly to **Halves** `[ 1/2 ][ 1/2 ]` |
 | `Ctrl + Alt + 3` | Switch directly to **Thirds** `[ 1/3 ][ 1/3 ][ 1/3 ]` |
