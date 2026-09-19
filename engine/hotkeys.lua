@@ -30,6 +30,22 @@ function hotkeys.bindAll(engine)
   table.insert(hotkeys.bindings, hs.hotkey.bind(mod, "z", function() engine:snap("left", "bottom") end))
   table.insert(hotkeys.bindings, hs.hotkey.bind(mod, "e", function() engine:snap("right", "top") end))
   table.insert(hotkeys.bindings, hs.hotkey.bind(mod, "c", function() engine:snap("right", "bottom") end))
+
+  -- Arrow & Number shortcuts (also route center windows in Halves picker)
+  table.insert(hotkeys.bindings, hs.hotkey.bind(mod, "left", function() engine:snap("left", "full") end))
+  table.insert(hotkeys.bindings, hs.hotkey.bind(mod, "right", function() engine:snap("right", "full") end))
+  table.insert(hotkeys.bindings, hs.hotkey.bind(mod, "1", function()
+    if engine.halves_picker and engine.halves_picker.isOpen() then
+      engine.halves_picker.chooseNext("left")
+    else
+      engine:snap("left", "full")
+    end
+  end))
+  table.insert(hotkeys.bindings, hs.hotkey.bind(mod, "escape", function()
+    if engine.halves_picker and engine.halves_picker.isOpen() then
+      engine.halves_picker.dismiss()
+    end
+  end))
 end
 
 function hotkeys.unbindAll()
