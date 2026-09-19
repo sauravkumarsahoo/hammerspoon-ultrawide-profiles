@@ -8,7 +8,7 @@ A lightweight, high-performance, modular window management engine built in Lua f
 
 - **Dynamic Column Profiles**: Choose between 2-column halves or 3-column layouts with customizable ratios (Thirds, Fourths, Fifths, Sixths).
 - **Mission Control Safe Snapping**: Center Stage snapping triggers exclusively from the **bottom screen edge** (Dock-aware). The top-center edge is intentionally unmapped to avoid interfering with macOS Mission Control.
-- **Hold-to-Snap Dwell Delay**: Avoid accidental snaps during fast cursor movement or window relocation. Holding at an edge for **200ms** arms the snap and softly fades in a visual footprint preview.
+- **Hold-to-Snap Dwell Delay**: Avoid accidental snaps during fast cursor movement or window relocation. Holding at an edge for **100ms** arms the snap and softly fades in a visual footprint preview.
 - **Display-Synchronized Animation**: Windows animate over **300ms** dynamically synchronized to your display's native refresh rate (60Hz, 100Hz, 120Hz ProMotion, 144Hz+) using a tailored quartic ease-out curve ($1 - (1-t)^3 \times (0.6(1-t) + 0.4)$). It traverses ~72% of the distance within the first 90ms for instantaneous responsiveness, followed by a feathered, silky landing.
 - **Corner Quadrant Snapping**: Direct snapping to top/bottom quadrants on screen corners.
 - **One-Handed Keyboard Cluster**: Fast layout control via `Ctrl + Alt` hotkeys.
@@ -27,7 +27,7 @@ Profiles define how horizontal screen space is partitioned across columns:
 | **Thirds** | `3` | `[   1/3    ][   1/3    ][   1/3    ]` | Left: 33.3%, Center: 33.3%, Right: 33.3% |
 | **Fourths** *(Default)* | `4` | `[  1/4  ][      1/2       ][  1/4  ]` | Left: 25%, Center: 50%, Right: 25% |
 | **Fifths** | `5` | `[ 1/5 ][        3/5         ][ 1/5 ]` | Left: 20%, Center: 60%, Right: 20% |
-| **Sixths** | `6` | `[ 1/6 ][        2/3         ][ 1/6 ]` | Left: 16.7%, Center: 66.7%, Right: 16.7% |
+| **Sixths** | `6` | `[ 1/6][         2/3          ][ 1/6]` | Left: 16.7%, Center: 66.7%, Right: 16.7% |
 
 ---
 
@@ -68,17 +68,17 @@ Drag any standard macOS window by its titlebar toward screen boundaries:
 
 1. **Center Stage**:
    - Drag to the **bottom edge of the screen** (hovering right above the Dock or into the bezel).
-   - Hold for **200ms**: a blue translucent preview footprint will fade in.
+   - Hold for **100ms**: a blue translucent preview footprint will fade in.
    - Release the mouse button to snap!
 2. **Side Columns**:
    - Drag to the **left** or **right** screen edge.
-   - Hold for 200ms until armed, then release.
+   - Hold for 100ms until armed, then release.
 3. **Corner Quadrants**:
    - Drag to any of the 4 screen corners to snap into half-height corner slots.
 4. **Mission Control Protection**:
    - The **top-center** screen border does not trigger snapping, leaving Mission Control and full-screen menu gestures completely conflict-free.
 5. **Accidental Drag Cancellation**:
-   - Quickly dragging a window past an edge without pausing for 200ms will **not** snap.
+   - Quickly dragging a window past an edge without pausing for 100ms will **not** snap.
    - Pulling the window back toward screen center before releasing cancels the snap.
 
 ---
@@ -96,7 +96,7 @@ Drag any standard macOS window by its titlebar toward screen boundaries:
     ├── animation.lua        # 100 FPS animation engine with graceful easing curve
     ├── preview.lua          # Canvas visual footprint overlay manager
     ├── hud.lua              # HUD on-screen alert notifications
-    ├── mouse.lua            # Dock-aware snap detection, 200ms dwell timer & event tap
+    ├── mouse.lua            # Dock-aware snap detection, 100ms dwell timer & event tap
     ├── hotkeys.lua          # Keyboard shortcuts (Ctrl + Alt cluster)
     └── init.lua             # Central Engine coordinator & lifecycle manager
 ```
@@ -109,7 +109,7 @@ Tuning values can be adjusted in [`engine/config.lua`](engine/config.lua):
 
 ```lua
 -- Timing
-hold_delay = 0.20,            -- Hold at edge for ~200ms before arming snap & showing preview
+hold_delay = 0.10,            -- Hold at edge for ~100ms before arming snap & showing preview
 animation_duration = 0.30,    -- Quick yet graceful 300ms window snap animation
 
 -- Spatial Thresholds (pixels)

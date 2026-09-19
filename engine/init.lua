@@ -95,7 +95,7 @@ function Engine:setAnimationDuration(sec)
 end
 
 function Engine:setHoldDelay(sec)
-  self.config.hold_delay = tonumber(sec) or 0.20
+  self.config.hold_delay = tonumber(sec) or 0.10
   self.hud.showNotice(string.format("HOLD DELAY: %.2fs", self.config.hold_delay), self.config.alert_style, 0.8)
 end
 

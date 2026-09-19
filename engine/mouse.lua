@@ -1,6 +1,6 @@
 -- =============================================================================
 -- engine/mouse.lua
--- Snap zone detection, 200ms dwell hold timer, and mouse drag event tap
+-- Snap zone detection, 100ms dwell hold timer, and mouse drag event tap
 -- =============================================================================
 
 local mouseModule = {}
@@ -87,7 +87,7 @@ function mouseModule.detectSnapZone(mousePos, fFrame, uFrame, config, profile)
   return nil
 end
 
--- Create the EventTap with 200ms dwell delay and smooth animation commit
+-- Create the EventTap with 100ms dwell delay and smooth animation commit
 function mouseModule.createEventTap(engine)
   local state = {
     targetWindow = nil,
@@ -141,7 +141,7 @@ function mouseModule.createEventTap(engine)
                              state.activeZone.row == zone.row
 
           if not isSameZone then
-            -- Zone entered or changed: restart 200ms dwell timer
+            -- Zone entered or changed: restart 100ms dwell timer
             cancelDwell()
             state.activeZone = zone
             if engine.preview then engine.preview:hide() end

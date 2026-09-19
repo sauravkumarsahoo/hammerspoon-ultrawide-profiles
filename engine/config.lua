@@ -9,12 +9,12 @@ local config = {
     { id = "thirds",  denominator = 3, label = "[   1/3    ][   1/3    ][   1/3    ]", left = 1/3, center = 1/3, right = 1/3 },
     { id = "fourths", denominator = 4, label = "[  1/4  ][      1/2       ][  1/4  ]", left = 1/4, center = 2/4, right = 1/4 },
     { id = "fifths",  denominator = 5, label = "[ 1/5 ][        3/5         ][ 1/5 ]", left = 1/5, center = 3/5, right = 1/5 },
-    { id = "sixths",  denominator = 6, label = "[ 1/6 ][        2/3         ][ 1/6 ]", left = 1/6, center = 4/6, right = 1/6 }
+    { id = "sixths",  denominator = 6, label = "[ 1/6][         2/3          ][ 1/6]", left = 1/6, center = 4/6, right = 1/6 }
   },
   default_profile = 3, -- Default to fourths [  1/4  ][      1/2       ][  1/4  ]
 
   -- Timing
-  hold_delay = 0.20,            -- Hold at edge for ~200ms before arming snap & showing preview
+  hold_delay = 0.10,            -- Hold at edge for ~100ms before arming snap & showing preview
   animation_duration = 0.30,    -- Quick yet graceful 300ms window snap animation
 
   -- Spatial Thresholds (pixels)
