@@ -5,7 +5,7 @@
 
 local geometry = {}
 
-function geometry.calculateFrame(profile, split_horizontal, col, row, screen, win)
+function geometry.calculateFrame(profile, col, row, screen, win)
   screen = screen or hs.screen.mainScreen():frame()
 
   local x, w, y, h
@@ -62,11 +62,7 @@ function geometry.calculateFrame(profile, split_horizontal, col, row, screen, wi
   end
 
   -- Vertical Allocation
-  local is_split = split_horizontal and (col == "left" or col == "right")
-  if is_split and row ~= "full" then
-    h = math.floor(screen.h / 2)
-    y = (row == "top") and screen.y or (screen.y + (screen.h - h))
-  elseif row == "top" then
+  if row == "top" then
     h = math.floor(screen.h / 2)
     y = screen.y
   elseif row == "bottom" then

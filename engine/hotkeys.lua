@@ -14,7 +14,6 @@ function hotkeys.bindAll(engine)
 
   -- Profile Shortcuts by Denominator (2 to 6) & Cycle
   table.insert(hotkeys.bindings, hs.hotkey.bind(mod, "`", function() engine:cycleProfile() end))
-  table.insert(hotkeys.bindings, hs.hotkey.bind(mod, "1", function() engine:toggleSplit() end))
   table.insert(hotkeys.bindings, hs.hotkey.bind(mod, "2", function() engine:toggleProfile(2) end))
   table.insert(hotkeys.bindings, hs.hotkey.bind(mod, "3", function() engine:toggleProfile(3) end))
   table.insert(hotkeys.bindings, hs.hotkey.bind(mod, "4", function() engine:toggleProfile(4) end))

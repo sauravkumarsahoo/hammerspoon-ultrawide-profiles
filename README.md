@@ -10,7 +10,7 @@ A lightweight, high-performance, modular window management engine built in Lua f
 - **Mission Control Safe Snapping**: Center Stage snapping triggers exclusively from the **bottom screen edge** (Dock-aware). The top-center edge is intentionally unmapped to avoid interfering with macOS Mission Control.
 - **Hold-to-Snap Dwell Delay**: Avoid accidental snaps during fast cursor movement or window relocation. Holding at an edge for **200ms** arms the snap and softly fades in a visual footprint preview.
 - **100 FPS Quick-yet-Graceful Animation**: Windows animate over **300ms** at 100 FPS (10ms tick rate) using a tailored quartic ease-out curve ($1 - (1-t)^3 \times (0.6(1-t) + 0.4)$). It traverses ~72% of the distance within the first 90ms for instantaneous responsiveness, followed by a feathered, silky landing.
-- **Corner Split Support**: Support for top/bottom quadrant snapping on screen corners.
+- **Corner Quadrant Snapping**: Direct snapping to top/bottom quadrants on screen corners.
 - **One-Handed Keyboard Cluster**: Fast layout control via `Ctrl + Alt` hotkeys.
 - **Modular Architecture**: Clean, decoupled Lua modules with zero external dependencies.
 - **CLI & IPC Ready**: Full control via `hs -c "WindowEngine:..."`.
@@ -42,7 +42,7 @@ All hotkeys utilize the left-hand modifier cluster: `Ctrl + Alt`.
 | `Ctrl + Alt + S` | Snap focused window to **Center** column |
 | `Ctrl + Alt + D` | Snap focused window to **Right** column |
 
-### Corner Snapping (Top & Bottom Splits)
+### Corner Snapping (Quadrants)
 | Shortcut | Action |
 |---|---|
 | `Ctrl + Alt + Q` | Snap to **Top-Left** quadrant |
@@ -50,11 +50,10 @@ All hotkeys utilize the left-hand modifier cluster: `Ctrl + Alt`.
 | `Ctrl + Alt + E` | Snap to **Top-Right** quadrant |
 | `Ctrl + Alt + C` | Snap to **Bottom-Right** quadrant |
 
-### Profile & Split Control
+### Profile Selection
 | Shortcut | Action |
 |---|---|
 | ``Ctrl + Alt + ` `` | **Cycle** to next layout profile (2 → 3 → 4 → 5 → 6 → 2) |
-| `Ctrl + Alt + 1` | **Toggle horizontal split** for corner columns |
 | `Ctrl + Alt + 2` | Switch directly to **Halves** `[ 1/2 ][ 1/2 ]` |
 | `Ctrl + Alt + 3` | Switch directly to **Thirds** `[ 1/3 ][ 1/3 ][ 1/3 ]` |
 | `Ctrl + Alt + 4` | Switch directly to **Fourths** `[ 1/4 ][ 1/2 ][ 1/4 ]` |
@@ -138,9 +137,6 @@ hs -c "WindowEngine:setProfile(5)"
 
 # Cycle to next profile
 hs -c "WindowEngine:cycleProfile()"
-
-# Toggle horizontal split
-hs -c "WindowEngine:toggleSplit()"
 
 # Adjust animation duration (e.g. 0.25s)
 hs -c "WindowEngine:setAnimationDuration(0.25)"

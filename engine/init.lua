@@ -21,7 +21,6 @@ local Engine = {
 
   current_profile = config.default_profile,
   previous_profile = nil,
-  split_horizontal = false,
   mouse_snap_enabled = true,
 
   preview = nil,
@@ -34,7 +33,7 @@ function Engine:getCurrentProfile()
 end
 
 function Engine:showHUD()
-  self.hud.showHUD(self:getCurrentProfile(), self.split_horizontal, self.config.alert_style)
+  self.hud.showHUD(self:getCurrentProfile(), self.config.alert_style)
 end
 
 function Engine:resolveProfileIndex(val)
@@ -89,15 +88,6 @@ function Engine:cycleProfile()
   self:showHUD()
 end
 
-function Engine:toggleSplit(force_state)
-  if force_state ~= nil then
-    self.split_horizontal = force_state
-  else
-    self.split_horizontal = not self.split_horizontal
-  end
-  self:showHUD()
-end
-
 function Engine:setAnimationDuration(sec)
   self.config.animation_duration = tonumber(sec) or 0.30
   hs.window.animationDuration = self.config.animation_duration
@@ -121,7 +111,7 @@ end
 
 -- Geometry calculation proxy
 function Engine:calculateFrame(col, row, screen, win)
-  return self.geometry.calculateFrame(self:getCurrentProfile(), self.split_horizontal, col, row, screen, win)
+  return self.geometry.calculateFrame(self:getCurrentProfile(), col, row, screen, win)
 end
 
 -- Snap window via hotkey or programmatic call

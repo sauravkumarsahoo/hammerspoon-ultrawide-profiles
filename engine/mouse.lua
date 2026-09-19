@@ -152,7 +152,6 @@ function mouseModule.createEventTap(engine)
                 state.snapArmed = true
                 local target = engine.geometry.calculateFrame(
                   profile,
-                  engine.split_horizontal,
                   state.activeZone.col,
                   state.activeZone.row,
                   uFrame,
@@ -200,7 +199,6 @@ function mouseModule.createEventTap(engine)
             local profile = engine:getCurrentProfile()
             local target = engine.geometry.calculateFrame(
               profile,
-              engine.split_horizontal,
               targetZone.col,
               targetZone.row,
               uFrame,
