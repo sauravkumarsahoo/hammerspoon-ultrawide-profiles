@@ -23,12 +23,7 @@ Engine:start()
 -- Export to global environment for CLI integration and GC retention
 _G.WindowEngine = Engine
 
--- Notify readiness on load
-hs.alert.show(
-  string.format("Window Engine Loaded\n%s", Engine:getCurrentProfile().label),
-  Engine.config.alert_style,
-  hs.screen.mainScreen(),
-  1.0
-)
+-- Notify readiness on load with glassmorphic SVG HUD
+Engine:showHUD()
 
 return Engine
