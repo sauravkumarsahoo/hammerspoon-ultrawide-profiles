@@ -21,13 +21,13 @@ A lightweight, high-performance, modular window management engine built in Lua f
 
 Profiles define how horizontal screen space is partitioned across columns:
 
-| Profile | Denominator | Layout Preview | Column Proportions |
+| Profile | Denominator | Layout Preview (Fixed-Width) | Column Proportions |
 |---|:---:|---|---|
-| **Halves** | `2` | `[   1/2   ][   1/2   ]` | Left: 50%, Right: 50% (Center alternates) |
-| **Thirds** | `3` | `[ 1/3 ][ 1/3 ][ 1/3 ]` | Left: 33.3%, Center: 33.3%, Right: 33.3% |
-| **Fourths** *(Default)* | `4` | `[ 1/4 ][  1/2  ][ 1/4 ]` | Left: 25%, Center: 50%, Right: 25% |
-| **Fifths** | `5` | `[ 1/5 ][  3/5  ][ 1/5 ]` | Left: 20%, Center: 60%, Right: 20% |
-| **Sixths** | `6` | `[ 1/6 ][  2/3  ][ 1/6 ]` | Left: 16.7%, Center: 66.7%, Right: 16.7% |
+| **Halves** | `2` | `[      1/2       ][      1/2       ]` | Left: 50%, Right: 50% (Center alternates) |
+| **Thirds** | `3` | `[   1/3    ][   1/3    ][   1/3    ]` | Left: 33.3%, Center: 33.3%, Right: 33.3% |
+| **Fourths** *(Default)* | `4` | `[  1/4  ][      1/2       ][  1/4  ]` | Left: 25%, Center: 50%, Right: 25% |
+| **Fifths** | `5` | `[ 1/5 ][        3/5         ][ 1/5 ]` | Left: 20%, Center: 60%, Right: 20% |
+| **Sixths** | `6` | `[ 1/6 ][        2/3         ][ 1/6 ]` | Left: 16.7%, Center: 66.7%, Right: 16.7% |
 
 ---
 

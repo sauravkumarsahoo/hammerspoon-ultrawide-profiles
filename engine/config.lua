@@ -5,13 +5,13 @@
 
 local config = {
   profiles = {
-    { id = "halves",  denominator = 2, label = "[   1/2   ][   1/2   ]", left = 1/2, center = 1/2, right = 1/2 },
-    { id = "thirds",  denominator = 3, label = "[ 1/3 ][ 1/3 ][ 1/3 ]", left = 1/3, center = 1/3, right = 1/3 },
-    { id = "fourths", denominator = 4, label = "[ 1/4 ][  1/2  ][ 1/4 ]", left = 1/4, center = 2/4, right = 1/4 },
-    { id = "fifths",  denominator = 5, label = "[ 1/5 ][  3/5  ][ 1/5 ]", left = 1/5, center = 3/5, right = 1/5 },
-    { id = "sixths",  denominator = 6, label = "[ 1/6 ][  2/3  ][ 1/6 ]", left = 1/6, center = 4/6, right = 1/6 }
+    { id = "halves",  denominator = 2, label = "[      1/2       ][      1/2       ]", left = 1/2, center = 1/2, right = 1/2 },
+    { id = "thirds",  denominator = 3, label = "[   1/3    ][   1/3    ][   1/3    ]", left = 1/3, center = 1/3, right = 1/3 },
+    { id = "fourths", denominator = 4, label = "[  1/4  ][      1/2       ][  1/4  ]", left = 1/4, center = 2/4, right = 1/4 },
+    { id = "fifths",  denominator = 5, label = "[ 1/5 ][        3/5         ][ 1/5 ]", left = 1/5, center = 3/5, right = 1/5 },
+    { id = "sixths",  denominator = 6, label = "[ 1/6 ][        2/3         ][ 1/6 ]", left = 1/6, center = 4/6, right = 1/6 }
   },
-  default_profile = 3, -- Default to fourths [ 1/4 ][ 1/2 ][ 1/4 ]
+  default_profile = 3, -- Default to fourths [  1/4  ][      1/2       ][  1/4  ]
 
   -- Timing
   hold_delay = 0.20,            -- Hold at edge for ~200ms before arming snap & showing preview
@@ -27,8 +27,8 @@ local config = {
     strokeColor = { white = 1, alpha = 0.8 },
     fillColor   = { hex = "#1e1e2e", alpha = 0.95 },
     textColor   = { white = 1, alpha = 1 },
-    textFont    = ".AppleSystemUIFontBold",
-    textSize    = 22,
+    textFont    = "Menlo-Bold",
+    textSize    = 18,
     radius      = 12,
     atScreenEdge = 0,
     fadeInDuration = 0.1,
