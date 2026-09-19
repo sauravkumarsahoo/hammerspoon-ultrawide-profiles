@@ -9,7 +9,7 @@ A lightweight, high-performance, modular window management engine built in Lua f
 - **Dynamic Column Profiles**: Choose between 2-column halves or 3-column layouts with customizable ratios (Thirds, Fourths, Fifths, Sixths).
 - **Mission Control Safe Snapping**: Center Stage snapping triggers exclusively from the **bottom screen edge** (Dock-aware). The top-center edge is intentionally unmapped to avoid interfering with macOS Mission Control.
 - **Hold-to-Snap Dwell Delay**: Avoid accidental snaps during fast cursor movement or window relocation. Holding at an edge for **200ms** arms the snap and softly fades in a visual footprint preview.
-- **100 FPS Quick-yet-Graceful Animation**: Windows animate over **300ms** at 100 FPS (10ms tick rate) using a tailored quartic ease-out curve ($1 - (1-t)^3 \times (0.6(1-t) + 0.4)$). It traverses ~72% of the distance within the first 90ms for instantaneous responsiveness, followed by a feathered, silky landing.
+- **Display-Synchronized Animation**: Windows animate over **300ms** dynamically synchronized to your display's native refresh rate (60Hz, 100Hz, 120Hz ProMotion, 144Hz+) using a tailored quartic ease-out curve ($1 - (1-t)^3 \times (0.6(1-t) + 0.4)$). It traverses ~72% of the distance within the first 90ms for instantaneous responsiveness, followed by a feathered, silky landing.
 - **Corner Quadrant Snapping**: Direct snapping to top/bottom quadrants on screen corners.
 - **One-Handed Keyboard Cluster**: Fast layout control via `Ctrl + Alt` hotkeys.
 - **Modular Architecture**: Clean, decoupled Lua modules with zero external dependencies.

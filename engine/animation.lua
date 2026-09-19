@@ -7,6 +7,18 @@ local animation = {
   activeAnimations = {}
 }
 
+-- Detect current screen refresh rate dynamically (e.g. 60Hz, 100Hz, 120Hz ProMotion, 144Hz)
+function animation.getScreenRefreshRate(screen)
+  screen = screen or hs.screen.mainScreen()
+  if screen then
+    local mode = screen:currentMode()
+    if mode and mode.freq and mode.freq > 0 then
+      return mode.freq
+    end
+  end
+  return 60 -- Fallback to 60Hz if not reported
+end
+
 -- Easing curve: Quick initial burst followed by a feathered, graceful deceleration
 -- Reaches ~72% distance in first 30% of time, with zero velocity and acceleration at rest
 local function easeQuickGraceful(t)
@@ -45,11 +57,15 @@ function animation.animate(win, target, duration)
     return
   end
 
+  local screen = win:screen() or hs.screen.mainScreen()
+  local refreshRate = animation.getScreenRefreshRate(screen)
+  local frameInterval = 1.0 / refreshRate
+
   local startTime = hs.timer.secondsSinceEpoch()
   local animEntry = {}
 
-  -- 10ms timer provides 100 FPS updates
-  animEntry.timer = hs.timer.new(0.010, function()
+  -- Timer dynamically synchronizes to the screen's native refresh rate
+  animEntry.timer = hs.timer.new(frameInterval, function()
     local now = hs.timer.secondsSinceEpoch()
     local progress = (now - startTime) / duration
 
